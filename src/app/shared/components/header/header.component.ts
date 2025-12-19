@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-    selector: 'app-header',
-    standalone: true,
-    imports: [RouterLink, RouterLinkActive],
-    template: `
+  selector: 'app-header',
+  standalone: true,
+  imports: [RouterLink, RouterLinkActive],
+  template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" routerLink="/">HotelBooking</a>
@@ -19,6 +19,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
             </li>
             <li class="nav-item">
               <a class="nav-link" routerLink="/rooms" routerLinkActive="active">Rooms</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/my-bookings" routerLinkActive="active">My Bookings</a>
             </li>
           </ul>
         </div>

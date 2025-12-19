@@ -1,0 +1,37 @@
+[
+    {
+        "id": "101",
+        "roomName": "101",
+        "type": "Single",
+        "price": 150,
+        "isAvailable": true
+    },
+    {
+        "id": "102",
+        "roomName": "102",
+        "type": "Single",
+        "price": 150,
+        "isAvailable": false
+    },
+    {
+        "id": "201",
+        "roomName": "201",
+        "type": "Double",
+        "price": 250,
+        "isAvailable": true
+    },
+    {
+        "id": "202",
+        "roomName": "202",
+        "type": "Double",
+        "price": 250,
+        "isAvailable": true
+    },
+    {
+        "id": "301",
+        "roomName": "301",
+        "type": "Suite",
+        "price": 500,
+        "isAvailable": true
+    }
+]

@@ -1,14 +1,22 @@
 <div class="d-flex flex-column min-vh-100">
-  <app-header></app-header>
-  <div class="container-fluid flex-grow-1">
-    <div class="row min-vh-100">
-      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse px-0">
-        <app-sidebar></app-sidebar>
-      </nav>
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-        <router-outlet></router-outlet>
+  <!-- Top Navbar (Visible only on Mobile/Tablet < 992px) -->
+  <app-header class="d-lg-none"></app-header>
+
+  <div class="row flex-nowrap flex-grow-1">
+    <!-- Sidebar Column (Visible only on Desktop >= 992px) -->
+    <div class="col-auto px-0 d-none d-lg-block" style="width: 280px;">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <!-- Main Content Column -->
+    <div class="col d-flex flex-column p-0">
+      <!-- Main Content Area -->
+      <main class="flex-grow-1 overflow-auto d-flex flex-column px-3">
+        <div class="flex-grow-1">
+          <router-outlet></router-outlet>
+        </div>
+
       </main>
     </div>
   </div>
-  <app-footer></app-footer>
 </div>

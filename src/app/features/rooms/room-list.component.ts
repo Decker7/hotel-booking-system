@@ -1,16 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RoomService } from '../../core/services/room.service';
 import { Room } from '../../core/models/room.interface';
+import { Booking } from '../../core/models/booking.interface';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap, startWith } from 'rxjs/operators';
 import { RoomCardComponent } from '../../shared/components/room-card/room-card.component';
+import { BookingModalComponent } from '../../shared/components/booking-modal/booking-modal.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule, RoomCardComponent],
+  imports: [CommonModule, RoomCardComponent, BookingModalComponent],
   template: `
     <div class="container mt-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -35,18 +37,29 @@ import { Router } from '@angular/router';
       <div *ngIf="(filteredRooms$ | async)?.length === 0" class="alert alert-info mt-4">
         No rooms found for the selected filter.
       </div>
+      
+
+
+      <app-booking-modal #bookingModal (bookingConfirmed)="onBookingConfirmed($event)"></app-booking-modal>
     </div>
   `
 })
 export class RoomListComponent {
+  @ViewChild('bookingModal') bookingModal!: BookingModalComponent;
   private roomService = inject(RoomService);
   private router = inject(Router);
 
   private filterSubject = new BehaviorSubject<string>('All');
   filter$ = this.filterSubject.asObservable();
 
+  private refreshSubject = new BehaviorSubject<void>(undefined);
+
+  rooms$ = this.refreshSubject.pipe(
+    switchMap(() => this.roomService.getRooms())
+  );
+
   filteredRooms$: Observable<Room[]> = combineLatest([
-    this.roomService.getRooms(),
+    this.rooms$,
     this.filter$
   ]).pipe(
     map(([rooms, filter]) => {
@@ -63,9 +76,21 @@ export class RoomListComponent {
   }
 
   onBook(room: Room) {
-    console.log('Book clicked for', room);
-    // Navigate to detail or show modal
-    // this.router.navigate(['/rooms', room.id]);
-    alert(`Booking feature coming soon for ${room.name}!`);
+    this.bookingModal.open(room);
   }
+
+  onBookingConfirmed(booking: Booking) {
+    this.roomService.bookRoom(booking).subscribe({
+      next: () => {
+        alert(`Success! Room ${booking.roomName} booked for ${booking.guestName}.`);
+        this.refreshSubject.next(); // Refresh list to show 'Sold Out'
+      },
+      error: (err) => {
+        console.error('Booking failed details:', err);
+        alert(`Failed to confirm booking: ${err.message || 'Server error'}. Check console for details.`);
+      }
+    });
+  }
+
+
 }

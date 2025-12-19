@@ -10,6 +10,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/rooms/room-list.component').then(m => m.RoomListComponent)
     },
     {
+        path: 'my-bookings',
+        loadComponent: () => import('./features/bookings/my-bookings.component').then(m => m.MyBookingsComponent)
+    },
+    {
         path: '**',
         redirectTo: '',
         pathMatch: 'full'
