@@ -14,12 +14,15 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RoomCardComponent, BookingModalComponent],
   template: `
-    <div class="container mt-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Available Rooms</h2>
-        <div class="d-flex align-items-center">
-            <label for="roomType" class="me-2 fw-bold">Filter by Type:</label>
-            <select id="roomType" class="form-select w-auto" (change)="onFilterChange($event)">
+    <div class="container mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom">
+        <div>
+          <h2 class="fw-bold mb-1">Available Rooms</h2>
+          <p class="text-muted mb-0">Discover our luxury assignments</p>
+        </div>
+        <div class="d-flex align-items-center bg-white p-2 rounded shadow-sm border">
+            <label for="roomType" class="me-3 fw-bold text-muted small ps-2">FILTER BY</label>
+            <select id="roomType" class="form-select border-0 bg-transparent fw-bold" style="width: 150px; cursor: pointer;" (change)="onFilterChange($event)">
                 <option value="All">All Rooms</option>
                 <option value="Single">Single</option>
                 <option value="Double">Double</option>
