@@ -1,9 +1,12 @@
 export interface Room {
-    id: number;
-    name: string;
+    // API fields
+    id: string; // MockAPI uses string IDs usually
+    roomName: string; // Renamed from name
     type: string;
     price: number;
-    imageUrl: string;
     isAvailable: boolean;
-    amenities: string[];
+    // Optional/Computed fields (frontend only)
+    name?: string;     // Alias for roomName
+    imageUrl?: string;
+    amenities?: string[];
 }

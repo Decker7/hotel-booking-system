@@ -1,58 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { Room } from '../models/room.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoomService {
-    private rooms: Room[] = [
-        {
-            id: 1,
-            name: 'Deluxe Ocean View',
-            type: 'Deluxe',
-            price: 250,
-            imageUrl: 'https://placehold.co/600x400',
-            isAvailable: true,
-            amenities: ['WiFi', 'Air Conditioning', 'Ocean View']
-        },
-        {
-            id: 2,
-            name: 'Standard City View',
-            type: 'Standard',
-            price: 150,
-            imageUrl: 'https://placehold.co/600x400',
-            isAvailable: true,
-            amenities: ['WiFi', 'Air Conditioning']
-        },
-        {
-            id: 3,
-            name: 'Executive Suite',
-            type: 'Suite',
-            price: 450,
-            imageUrl: 'https://placehold.co/600x400',
-            isAvailable: false,
-            amenities: ['WiFi', 'Pool Access', 'Mini Bar', 'King Bed']
-        },
-        {
-            id: 4,
-            name: 'Family Room',
-            type: 'Family',
-            price: 300,
-            imageUrl: 'https://placehold.co/600x400',
-            isAvailable: true,
-            amenities: ['WiFi', 'Kitchenette', '2 Queen Beds']
-        }
-    ];
+    private apiUrl = 'https://6944a8a87dd335f4c360dc3e.mockapi.io/api/v1/rooms';
 
-    constructor() { }
+    constructor(private http: HttpClient) { }
 
     getRooms(): Observable<Room[]> {
-        return of(this.rooms);
+        return this.http.get<Room[]>(this.apiUrl).pipe(
+            map(rooms => rooms.map(room => ({
+                ...room,
+                name: room.roomName, // Map roomName to name for compatibility
+                imageUrl: 'https://placehold.co/600x400', // Default image
+                amenities: ['WiFi', 'Air Conditioning'] // Default amenities
+            })))
+        );
     }
 
-    getRoomById(id: number): Observable<Room | undefined> {
-        const room = this.rooms.find(r => r.id === id);
-        return of(room);
+    getRoomById(id: string): Observable<Room | undefined> {
+        return this.http.get<Room>(`${this.apiUrl}/${id}`).pipe(
+            map(room => ({
+                ...room,
+                name: room.roomName,
+                imageUrl: 'https://placehold.co/600x400',
+                amenities: ['WiFi', 'Air Conditioning']
+            }))
+        );
     }
 }
