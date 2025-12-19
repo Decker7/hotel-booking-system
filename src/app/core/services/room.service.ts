@@ -12,13 +12,26 @@ export class RoomService {
 
     constructor(private http: HttpClient) { }
 
+    private getRoomImage(type: string): string {
+        switch (type.toLowerCase()) {
+            case 'single':
+                return 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            case 'double':
+                return 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            case 'suite':
+                return 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            default:
+                return 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+        }
+    }
+
     getRooms(): Observable<Room[]> {
         return this.http.get<Room[]>(this.apiUrl).pipe(
             map(rooms => rooms.map(room => ({
                 ...room,
-                name: room.roomName, // Map roomName to name for compatibility
-                imageUrl: 'https://placehold.co/600x400', // Default image
-                amenities: ['WiFi', 'Air Conditioning'] // Default amenities
+                name: room.roomName,
+                imageUrl: this.getRoomImage(room.type),
+                amenities: ['WiFi', 'Air Conditioning']
             })))
         );
     }
@@ -28,7 +41,7 @@ export class RoomService {
             map(room => ({
                 ...room,
                 name: room.roomName,
-                imageUrl: 'https://placehold.co/600x400',
+                imageUrl: this.getRoomImage(room.type),
                 amenities: ['WiFi', 'Air Conditioning']
             }))
         );
